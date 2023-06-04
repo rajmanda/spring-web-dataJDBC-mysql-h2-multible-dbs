@@ -27,10 +27,32 @@ public class DemoController {
     @Qualifier("h2JdbcTemplate")
     JdbcTemplate h2JdbcTemplate ;
 
-//    MovieRepository movieRepository ;
+    @GetMapping("/helloCinemas")
+    public String helloCinemas() {
 
-    @GetMapping("/hello")
-    public String sayHello() {
+        String sqldb1 = "SELECT * FROM cinemas";
+        db2JdbcTemplate.query(sqldb1, (rs, rowNum) -> {
+            //int id = rs.getInt("id");
+            String name = rs.getString("title");
+            System.out.println( "FROM  DB1.MOVIES - title: " + name);
+            return null;
+        });
+        h2JdbcTemplate.execute("INSERT INTO counts (name) VALUES('DB1')");
+
+        String sqldb2 = "SELECT * FROM cinemas";
+        db2JdbcTemplate.query(sqldb2, (rs, rowNum) -> {
+            //int id = rs.getInt("id");
+            String name = rs.getString("title");
+            System.out.println( "FROM  DB2.CINEMAS - title: " + name);
+            return null;
+        });
+        h2JdbcTemplate.execute("INSERT INTO counts (name) VALUES('DB2')");
+
+        return "Cinema Added addded to db2 !";
+    }
+
+    @GetMapping("/helloMovies")
+    public String helloMovies() {
 
 
 //        movieRepository.saveAll(
@@ -58,7 +80,7 @@ public class DemoController {
         });
         h2JdbcTemplate.execute("INSERT INTO counts (name) VALUES('DB2')");
 
-        return "Movies Added !";
+        return "Movies Added to db1  !";
     }
 
     @GetMapping("/greet/{name}")
